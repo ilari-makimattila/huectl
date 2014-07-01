@@ -9,12 +9,6 @@ if (configfile == "/.huectl") {
 
 var config
 
-if (!fs.existsSync(configfile)) {
-    console.error("Configuration file does not exist! Have you registered..?")
-    return 1
-}
-
-
 var hue = require("node-hue-api").hue
 var lightState = require("node-hue-api").lightState
 
@@ -30,7 +24,7 @@ function registerUser(hostname) {
     var newUserName = process.env["USER"],
         userDescription = "huectl"
         
-    if (!newuserName) {
+    if (!newUserName) {
         console.error("USER not set in environment! Can not register...")
         process.exit(1)
     }
@@ -178,7 +172,7 @@ if (args.length == 0 || args[1] == "help") {
     return 1
 }
 
-if (args[1] == "register") {
+if (args[0] == "register") {
     if (args.length != 2) {
         console.error("Error: hostname required!")
         console.error("usage: huectl register <hostname>")
@@ -189,6 +183,11 @@ if (args[1] == "register") {
     
     registerUser(args[1])
     return 0;
+}
+
+if (!fs.existsSync(configfile)) {
+    console.error("Configuration file does not exist! Have you registered..?")
+    return 1
 }
 
 var config = require(configfile)
